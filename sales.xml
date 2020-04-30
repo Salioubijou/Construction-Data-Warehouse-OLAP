@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<Schema name="Sales">
+
+<Cube name="Ventes">
+  
+  <Table name="ventes" />
+  <!-- Dimension Prestation -->
+  <Dimension name="Prestation Dim"  foreignKey="prestation_id">
+    <Hierarchy hasAll="true" allMemberName="All Prestations" primaryKey="prestation_id">
+      <Table name="prestation"/>
+      <Level name="Prestation" column="description" uniqueMembers="true"/>
+    </Hierarchy>
+  </Dimension>
+  
+  <!--Dimension Customer -->
+
+  <Dimension name="Customer Dim" foreignKey="customer_id">
+    <Hierarchy hasAll="true" allMemberName="All Customers" primaryKey="customer_id">
+      <Table name="customer"/>
+      <Level name="Nom Customer" column="nom" uniqueMembers="false" />
+      <Level name="Prenom Customer" column="prenom" uniqueMembers="false" />
+    </Hierarchy>
+  </Dimension>
+  
+    <Dimension name="Lieux" foreignKey="cities_id">
+      <Hierarchy hasAll="true" allMemberName="All Cities" primaryKey="id">
+        <Table name="cities"/>
+        <Level name="Nom Ville" column="name" uniqueMembers="true"/>
+        <Level name="Département" column="department_code" uniqueMembers="true" />
+        <Level name="Code postal" column="zip_code" uniqueMembers="true" />
+      </Hierarchy>
+    </Dimension>
+ 
+  <!--Dimension name="Lieux" foreignKey="cities_id">
+    <Hierarchy hasAll="true" primaryKey="id">
+      <Table name="cities"/>
+      <Level name="Nom Ville" column="name" uniqueMembers="true"/>
+      <Level name="Département" column="department_name" uniqueMembers="true" />
+      <Level name="Code postal" column="zip_code" uniqueMembers="true" />
+    </Hierarchy>
+    
+    <Hierarchy hasAll="true" primaryKey="id">
+      <Table name="departments"/>
+      <Level name="Nom Departement" column="name" uniqueMembers="true"/>
+      <Level name="Département" column="department_name" uniqueMembers="true" />
+      <Level name="Code Departement" column="code" uniqueMembers="true" />
+    </Hierarchy>
+    
+    <Hierarchy hasAll="true" primaryKey="id">
+      <Table name="regions"/>
+      <Level name="Nom Region" column="name" uniqueMembers="true"/>
+      <Level name="Département" column="department_name" uniqueMembers="true" />
+      <Level name="Code Region" column="code" uniqueMembers="true" />
+    </Hierarchy>
+  </Dimension>
+  -->
+  <!--
+  <Dimension >
+    ...
+  </Dimension>-->
+
+  <Measure name="Prestation Mes" column="prestation_id" aggregator="count" formatString="#,###" />
+  <Measure name="Somme Prix" column="price" aggregator="sum"/>
+  <!--Measure ... /-->
+
+</Cube>
+
+</Schema>
