@@ -6,16 +6,16 @@
   
   <Table name="ventes" />
   <!-- Dimension Prestation -->
-  <Dimension name="Prestation Dim"  foreignKey="prestation_id">
+  <Dimension name="Prestation"  foreignKey="prestation_id">
     <Hierarchy hasAll="true" allMemberName="All Prestations" primaryKey="prestation_id">
       <Table name="prestation"/>
-      <Level name="Prestation" column="description" uniqueMembers="true"/>
+      <Level name="Description Prestation" column="description" uniqueMembers="true"/>
     </Hierarchy>
   </Dimension>
   
   <!--Dimension Customer -->
 
-  <Dimension name="Customer Dim" foreignKey="customer_id">
+  <Dimension name="Customer" foreignKey="customer_id">
     <Hierarchy hasAll="true" allMemberName="All Customers" primaryKey="customer_id">
       <Table name="customer"/>
       <Level name="Nom Customer" column="nom" uniqueMembers="false" />
@@ -23,46 +23,55 @@
     </Hierarchy>
   </Dimension>
   
-    <Dimension name="Lieux" foreignKey="cities_id">
-      <Hierarchy hasAll="true" allMemberName="All Cities" primaryKey="id">
-        <Table name="cities"/>
-        <Level name="Nom Ville" column="name" uniqueMembers="true"/>
-        <Level name="Département" column="department_code" uniqueMembers="true" />
-        <Level name="Code postal" column="zip_code" uniqueMembers="true" />
-      </Hierarchy>
-    </Dimension>
- 
-  <!--Dimension name="Lieux" foreignKey="cities_id">
-    <Hierarchy hasAll="true" primaryKey="id">
-      <Table name="cities"/>
-      <Level name="Nom Ville" column="name" uniqueMembers="true"/>
-      <Level name="Département" column="department_name" uniqueMembers="true" />
-      <Level name="Code postal" column="zip_code" uniqueMembers="true" />
-    </Hierarchy>
-    
-    <Hierarchy hasAll="true" primaryKey="id">
-      <Table name="departments"/>
-      <Level name="Nom Departement" column="name" uniqueMembers="true"/>
-      <Level name="Département" column="department_name" uniqueMembers="true" />
-      <Level name="Code Departement" column="code" uniqueMembers="true" />
-    </Hierarchy>
-    
-    <Hierarchy hasAll="true" primaryKey="id">
-      <Table name="regions"/>
-      <Level name="Nom Region" column="name" uniqueMembers="true"/>
-      <Level name="Département" column="department_name" uniqueMembers="true" />
-      <Level name="Code Region" column="code" uniqueMembers="true" />
-    </Hierarchy>
+ <!-- Dimension Lieux-->
+  <Dimension name="Lieux" foreignKey="cities_id">
+    <Hierarchy hasAll="true" primaryKey="id" primaryKeyTable="cities" allMemberName="All Cities">
+		<Join leftKey="department_code" leftAlias="cities" rightAlias="departments" rightKey="code">
+			<Table name="cities"/>
+			<Join leftKey="region_code" leftAlias="departments" rightAlias="regions" rightKey="code">
+			  <Table name="departments"/>
+			  <Table name="regions"/>
+			</Join>
+		</Join>
+		<!-- Déclaration des levels-->
+		<Level name="Nom Region" table="regions" column="name" uniqueMembers="true" type="String"/>
+		<Level name="Nom Departement" table="departments" column="name" uniqueMembers="true" type="String"/>
+		<Level name="Nom Ville" table="cities" column="name" uniqueMembers="true" type="String"/>
+    <Level name="Code postal" table="cities" column="zip_code" uniqueMembers="true" type="String"/>
+	  </Hierarchy>
   </Dimension>
-  -->
-  <!--
-  <Dimension >
-    ...
-  </Dimension>-->
-
-  <Measure name="Prestation Mes" column="prestation_id" aggregator="count" formatString="#,###" />
-  <Measure name="Somme Prix" column="price" aggregator="sum"/>
-  <!--Measure ... /-->
+  
+  <!-- Dimension Times -->
+    <Dimension name="Times" foreignKey="heure_id">
+      <Hierarchy hasAll="true" allMemberName="All Times" primaryKey="heure_id" primaryKeyTable="heure">
+    		<Join leftKey="jour" rightAlias="jour" rightKey="jour_id">
+    			<Table name="heure"/>
+    			<join leftKey="mois" leftAlias="jour" rightAlias="mois" rightKey="mois_id">
+    			  <Table name="jour"/>
+    			  <join leftKey="trimestre" leftAlias="mois" rightAlias="trimestre" rightKey="trimestre_id">
+    			    <Table name="mois"/>
+    			     <join leftKey="annee" rightKey="annee_id">
+    			       <Table name="trimestre"/>
+    			       <Table name="annee"/>
+    			     </join>
+    			  </join>
+    			</join>
+    		</Join>
+  		<!-- Déclaration des levels-->
+  		<Level name="Annee" table="annee" column="annee" uniqueMembers="true"/>
+  		<Level name="Trimestre" table="trimestre" column="trimestre" uniqueMembers="false"/>
+  		<Level name="Mois" table="mois" column="human_readable_month" type="String" uniqueMembers="true"/>
+  		<Level name="Jour" table="jour" column="jour" uniqueMembers="true"/>
+  		<Level name="Part Of Day" table="heure" column="part_of_day" type="String" uniqueMembers="true"/>
+  		<Level name="Intervalle Heure" table="heure" column="slot" type="String" uniqueMembers="true"/>
+  	</Hierarchy>
+  </Dimension>
+  <!-- Les mesures Somme Prix, Moyenne Prix, Minimum Prix, Maximum Prix, Nombre de Ventes -->
+  <Measure name="Somme Prix" column="price" aggregator="sum" formatString="Currency"/>
+  <Measure name="Moyenne Prix" column="price" aggregator="avg" formatString=""/>
+  <Measure name="Minimum Prix" column="price" aggregator="min" formatString=""/>
+  <Measure name="Maximum Prix" column="price" aggregator="max" formatString=""/>
+  <Measure name="Nombre de Ventes" column="id" aggregator="count" formatString="#,###" />
 
 </Cube>
 
