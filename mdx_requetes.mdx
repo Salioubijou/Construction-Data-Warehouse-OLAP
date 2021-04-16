@@ -1,0 +1,33 @@
+-- 1 chiffre d'affaires total (somme des prix des ventes) sur l'ensemble des ventes
+--SELECT {[Measures].[Somme Prix]} ON COLUMNS FROM [Ventes]
+
+--2 chiffre d'affaires total par mois, les mois étant affichés en toutes lettres
+--SELECT {[Measures].[Somme Prix]} ON COLUMNS, Distinct({[Times].[Times].[Mois].Members}) ON ROWS FROM [Ventes]
+
+--3 prix de vente moyen, minimum et maximum par mois
+-- Moyenne
+--SELECT {[Measures].[Moyenne Prix]} ON COLUMNS, Distinct({[Times].[Times].[Mois].Members}) ON ROWS FROM [Ventes]
+
+--Minimum
+--SELECT {[Measures].[Minimum Prix]} ON COLUMNS, Distinct({[Times].[Times].[Mois].Members}) ON ROWS FROM [Ventes]
+
+--Maximum
+--SELECT {[Measures].[Maximum Prix]} ON COLUMNS, Distinct({[Times].[Times].[Mois].Members}) ON ROWS FROM [Ventes]
+
+--4 nombre de ventes par trimestre et par type de prestation
+/*SELECT NON EMPTY {[Times].[Times].[Trimestre].Members} ON COLUMNS, {[Measures].[Nombre de Ventes]}*{[Prestation].[All Prestations].Children} ON ROWS FROM [Ventes]*/
+
+--5 nombre de ventes par mois, cumulé sur les prestations « dépannage informatique », « dépannage internet » et « installation box »
+/*SELECT {[Measures].[Nombre de Ventes]} ON COLUMNS,  Distinct(CrossJoin(Hierarchize({[Times].[Mois].Members}), {[Prestation].[Prestation].[Dépannage informatique],
+[Prestation].[Prestation].[Installation box], [Prestation].[Prestation].[Dépannage internet]})) ON ROWS FROM [Ventes]*/
+
+/*SELECT Distinct({[Times].[Mois].Members}) ON COLUMNS, {[Measures].[Nombre de Ventes]}*{[Prestation].[Prestation].[Dépannage informatique],
+[Prestation].[Prestation].[Installation box], [Prestation].[Prestation].[Dépannage internet]} ON ROWS FROM [Ventes]*/
+
+--6 prix de vente moyen par région, par trimestre et par prestation
+/*SELECT {[Lieux].[Nom Region].Members} ON COLUMNS, NON EMPTY {[Measures].[Moyenne Prix]}*{[Times].[Trimestre].Members}*
+{[Prestation].[All Prestations].Children} ON ROWS FROM [Ventes]*/
+
+--7 nombre de ventes par période de la journée, cumulé sur toutes les ventes de l'année (indication : définir une hiérarchie dédiée)
+--SELECT {[Measures].[Nombre de Ventes]} ON COLUMNS, Distinct({[Times].[Part Of Day].Members}) ON ROWS FROM [Ventes]
+
