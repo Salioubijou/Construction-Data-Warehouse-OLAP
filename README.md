@@ -8,4 +8,4 @@
 * [Database SQL](/sql)
 * [Some decision-making requests](/mdx_requetes.mdx)
 * [Setting up the database with the cube](/sales.properties)
-* [Datawarehouse architect](sales.xml)
+* [Datawarehouse scheme](sales.xml)
