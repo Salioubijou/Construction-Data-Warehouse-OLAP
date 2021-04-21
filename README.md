@@ -3,4 +3,9 @@
 > 
 > **Tools**: Talend, SQL, PL/SQL, XML, Java, MDX, Pentaho, Glassfish, pivot4j-analytics
 > 
-[ETL screenshots](/Talend)
+* [ETL screenshots](/Talend)
+* [Training data](/data)
+* [Database SQL](/sql)
+* [Some decision-making requests](/mdx_requetes.mdx)
+* [Setting up the database with the cube](/sales.properties)
+* [Datawarehouse architect](sales.xml)
